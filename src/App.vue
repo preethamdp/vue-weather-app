@@ -27,25 +27,35 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: 'app',
   data () {
     return {
-      api_key: '1d9ecc114f668672819a9230c45329cf',
-      url_base: 'https://api.openweathermap.org/data/2.5/',
+      api_key: 'dbca700152c427cfa57a85d9065c6403',
+      url_base: 'api.openweathermap.org/data/2.5/',
       query: '',
       weather: {}
     }
   },
   methods: {
-    fetchWeather (e) {
+    fetchWeather1 (e) {
       if (e.key == "Enter") {
-        fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
+        fetch(`${this.url_base}weather?q=${this.query}&units=metric&appid=${this.api_key}`)
           .then(res => {
+            console.log(res);
             return res.json();
           }).then(this.setResults);
       }
     },
+    async fetchWeather(e){
+      if (e.key == "Enter") {
+      const { data } = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.query}&units=metric&appid=${this.api_key}`);
+      console.log(data)
+      this.setResults(data);
+      }
+    }
+    ,
     setResults (results) {
       this.weather = results;
       this.query = ''
